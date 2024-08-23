@@ -49,6 +49,7 @@ class Solution(object):
         
         return k
 
+```
 Class `Solution` with method `removeDuplicates` takes a list of integers `nums` and performs the following:
 
 - Checks if `nums` is empty and returns `0` if true.
