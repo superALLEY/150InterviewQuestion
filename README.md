@@ -5,7 +5,7 @@ Welcome to the 150 Interview Questions repository! This collection is designed t
 ## Structure of the Repository
 
 The repository is organized into different categories based on the type of problems:
-
+ 
 - Array
 - String
 - Linked List
