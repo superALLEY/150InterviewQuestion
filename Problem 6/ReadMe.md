@@ -1,86 +1,78 @@
 
-# Majority Element
+# Array Rotation
 
 ## Problem Description
 
 **Objective:**  
-Given an array `nums` of size `n`, the task is to find the majority element. The majority element is the element that appears more than `n/2` times in the array.
+Given an array `nums` of size `n`, rotate the array to the right by `k` steps, where `k` is a non-negative integer. The rotation should be done in-place.
 
 **Constraints:**
-- The input array `nums` will always have a majority element, meaning an element that appears more than `n/2` times.
-- The algorithm should run in linear time, `O(n)`, and use `O(1)` extra space.
+- The array should be rotated in-place with O(1) extra space.
+- The algorithm should run in linear time, `O(n)`.
 
 **Example:**
 
-- **Input:** `nums = [3, 2, 3]`  
-  **Output:** `3`  
-  **Explanation:** The majority element `3` appears twice in the array of size 3.
+- **Input:** `nums = [1, 2, 3, 4, 5, 6, 7]`, `k = 3`  
+  **Output:** `[5, 6, 7, 1, 2, 3, 4]`  
+  **Explanation:** The array is rotated to the right by 3 steps.
 
-- **Input:** `nums = [2, 2, 1, 1, 1, 2, 2]`  
-  **Output:** `2`  
-  **Explanation:** The majority element `2` appears four times in the array of size 7.
+- **Input:** `nums = [-1, -100, 3, 99]`, `k = 2`  
+  **Output:** `[3, 99, -1, -100]`  
+  **Explanation:** The array is rotated to the right by 2 steps.
 
 ## Approach
 
-### Boyer-Moore Voting Algorithm
+### Reversal Method
 
-This problem is efficiently solved using the **Boyer-Moore Voting Algorithm**. The algorithm works by maintaining a candidate for the majority element and a counter. The counter is used to track the balance between the candidate and other elements.
+This problem is efficiently solved using the **Reversal Method**. The algorithm involves reversing parts of the array to achieve the rotation in-place.
 
-1. **Initialization:**  
-   - Start with `count = 0` and `candidate = None`.
+1. **Reverse the Entire Array:**  
+   - First, reverse the entire array. This will move the elements that need to be rotated to the front to the back, and vice versa.
 
-2. **Iteration:**
-   - Iterate through each element in the array `nums`.
-   - If `count` is `0`, update the `candidate` to the current element.
-   - If the current element matches the `candidate`, increment `count` by `1`.
-   - If the current element does not match the `candidate`, decrement `count` by `1`.
+2. **Reverse the First `k` Elements:**  
+   - Next, reverse the first `k` elements. This reorders the first part of the array.
 
-3. **Result:**  
-   - After completing the iteration, the `candidate` will be the majority element.
+3. **Reverse the Remaining Elements:**  
+   - Finally, reverse the rest of the array (from index `k` to the end). This places the remaining elements in the correct order.
 
    ```python
    class Solution(object):
-    def majorityElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        count = 0
-        candidate = None
-        
-        for num in nums:
-            if count == 0:
-                candidate = num
-            count += (1 if num == candidate else -1)
-        
-        return candidate
+       def rotate(self, nums, k):
+           n = len(nums)
+           k = k % n  # In case k is greater than n
 
+           # Step 1: Reverse the entire array
+           self.reverse(nums, 0, n - 1)
+           # Step 2: Reverse the first k elements
+           self.reverse(nums, 0, k - 1)
+           # Step 3: Reverse the rest of the array
+           self.reverse(nums, k, n - 1)
+
+       def reverse(self, nums, start, end):
+           while start < end:
+               nums[start], nums[end] = nums[end], nums[start]
+               start += 1
+               end -= 1
    ```
 
-### Example Walkthrough with `nums = [4, 4, 5, 5, 5, 4, 5, 5, 5, 5]`:
+### Example Walkthrough with `nums = [1, 2, 3, 4, 5, 6, 7]` and `k = 3`:
 
 - **Initialization:**  
-  Start with `count = 0` and `candidate = None`.
+  Reverse the entire array: `[7, 6, 5, 4, 3, 2, 1]`.
 
-- **Iteration:**
-  - First element `4`: Since `count` is `0`, `candidate` is set to `4`, `count` is incremented to `1`.
-  - Second element `4`: It matches the `candidate`, so `count` is incremented to `2`.
-  - Third element `5`: It doesn't match the `candidate`, so `count` is decremented to `1`.
-  - Fourth element `5`: It doesn't match the `candidate`, so `count` is decremented to `0`.
-  - Fifth element `5`: Since `count` is `0`, `candidate` is set to `5`, `count` is incremented to `1`.
-  - Sixth element `4`: It doesn't match the `candidate`, so `count` is decremented to `0`.
-  - Seventh element `5`: Since `count` is `0`, `candidate` is set to `5`, `count` is incremented to `1`.
-  - Eighth element `5`: It matches the `candidate`, so `count` is incremented to `2`.
-  - Ninth element `5`: It matches the `candidate`, so `count` is incremented to `3`.
-  - Tenth element `5`: It matches the `candidate`, so `count` is incremented to `4`.
+- **Reverse the First 3 Elements:**
+  - After reversing: `[5, 6, 7, 4, 3, 2, 1]`.
+
+- **Reverse the Remaining Elements:**
+  - After reversing: `[5, 6, 7, 1, 2, 3, 4]`.
 
 - **Final Output:**  
-  The algorithm returns `5` as the majority element.
+  The algorithm returns `[5, 6, 7, 1, 2, 3, 4]`.
 
 ### Complexity Analysis
 
-- **Time Complexity:** `O(n)` where `n` is the number of elements in the array. The algorithm iterates through the array once.
-- **Space Complexity:** `O(1)` since only a few extra variables are used.
+- **Time Complexity:** `O(n)` where `n` is the number of elements in the array. The algorithm iterates through the array a constant number of times.
+- **Space Complexity:** `O(1)` since the reversal is done in-place with no extra space.
 
 ## How to Use This Repository
 
@@ -88,7 +80,7 @@ This problem is efficiently solved using the **Boyer-Moore Voting Algorithm**. T
    `git clone https://github.com/superALLEY/150InterviewQuestions.git`
 
 2. **Navigate to the Problem Folder:**  
-   Locate the folder for the "Majority Element" problem.
+   Locate the folder for the "Array Rotation" problem.
 
 3. **Run the Solution:**  
    Open the solution file in your preferred IDE and execute it to see the results.
