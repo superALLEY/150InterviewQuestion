@@ -1,90 +1,114 @@
 
-# Max Profit from Stock Prices
+# Majority Element
 
 ## Problem Description
 
-Given an array `prices` where `prices[i]` is the price of a given stock on the `i-th` day, return the maximum profit you can achieve from buying and selling the stock. You must buy before you sell, and you are only allowed to complete at most one transaction (i.e., buy one and sell one share of the stock).
+**Objective:**  
+Given an array `nums` of size `n`, the task is to find the majority element. The majority element is the element that appears more than `n/2` times in the array.
 
-If no profit can be achieved, return 0.
+**Constraints:**
+- The input array `nums` will always have a majority element, meaning an element that appears more than `n/2` times.
+- The algorithm should run in linear time, `O(n)`, and use `O(1)` extra space.
 
-### Constraints
-- `1 <= prices.length <= 10^5`
-- `0 <= prices[i] <= 10^4`
+**Example:**
 
-## Example 1
+- **Input:** `nums = [3, 2, 3]`  
+  **Output:** `3`  
+  **Explanation:** The majority element `3` appears twice in the array of size 3.
 
-**Input**:
-```python
-prices = [7, 1, 5, 3, 6, 4]
-```
-**Output**:
-```python
-5
-```
-**Explanation**:
-Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5.
-
-## Example 2
-
-**Input**:
-```python
-prices = [7, 6, 4, 3, 1]
-```
-**Output**:
-```python
-0
-```
-**Explanation**:
-In this case, no transaction is done, and the maximum profit is 0.
+- **Input:** `nums = [2, 2, 1, 1, 1, 2, 2]`  
+  **Output:** `2`  
+  **Explanation:** The majority element `2` appears four times in the array of size 7.
 
 ## Approach
 
-### Initial Setup:
+### Boyer-Moore Voting Algorithm
 
-- Use a variable `min_price` to keep track of the minimum price encountered so far.
-- Use another variable `max_profit` to store the maximum profit encountered so far.
+This problem is efficiently solved using the **Boyer-Moore Voting Algorithm**. The algorithm works by maintaining a candidate for the majority element and a counter. The counter is used to track the balance between the candidate and other elements.
 
-### Iterating Over the Array:
+1. **Initialization:**  
+   - Start with `count = 0` and `candidate = None`.
 
-- Iterate through the `prices` array.
-- For each price, if it's lower than the current `min_price`, update `min_price`.
-- Otherwise, calculate the profit by subtracting `min_price` from the current price, and update `max_profit` if this profit is higher than the current `max_profit`.
+2. **Iteration:**
+   - Iterate through each element in the array `nums`.
+   - If `count` is `0`, update the `candidate` to the current element.
+   - If the current element matches the `candidate`, increment `count` by `1`.
+   - If the current element does not match the `candidate`, decrement `count` by `1`.
 
-### Final Steps:
+3. **Result:**  
+   - After completing the iteration, the `candidate` will be the majority element.
 
-- After completing the loop, return `max_profit`.
+   ```python
+   class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        count = 0
+        candidate = None
+        
+        for num in nums:
+            if count == 0:
+                candidate = num
+            count += (1 if num == candidate else -1)
+        
+        return candidate
 
-## Solution
+   ```
 
-```python
-class Solution(object):
-    def maxProfit(self, prices):
-        min_price = float('inf')  # Initialize to a very large number
-        max_profit = 0  # Initialize to 0
+### Example Walkthrough with `nums = [4, 4, 5, 5, 5, 4, 5, 5, 5, 5]`:
 
-        for price in prices:
-            # Update min_price if current price is lower
-            if price < min_price:
-                min_price = price
-            # Calculate profit if current price is sold at min_price, update max_profit if higher
-            elif price - min_price > max_profit:
-                max_profit = price - min_price
+- **Initialization:**  
+  Start with `count = 0` and `candidate = None`.
 
-        return max_profit
-```
+- **Iteration:**
+  - First element `4`: Since `count` is `0`, `candidate` is set to `4`, `count` is incremented to `1`.
+  - Second element `4`: It matches the `candidate`, so `count` is incremented to `2`.
+  - Third element `5`: It doesn't match the `candidate`, so `count` is decremented to `1`.
+  - Fourth element `5`: It doesn't match the `candidate`, so `count` is decremented to `0`.
+  - Fifth element `5`: Since `count` is `0`, `candidate` is set to `5`, `count` is incremented to `1`.
+  - Sixth element `4`: It doesn't match the `candidate`, so `count` is decremented to `0`.
+  - Seventh element `5`: Since `count` is `0`, `candidate` is set to `5`, `count` is incremented to `1`.
+  - Eighth element `5`: It matches the `candidate`, so `count` is incremented to `2`.
+  - Ninth element `5`: It matches the `candidate`, so `count` is incremented to `3`.
+  - Tenth element `5`: It matches the `candidate`, so `count` is incremented to `4`.
 
-## Explanation
+- **Final Output:**  
+  The algorithm returns `5` as the majority element.
 
-- The loop goes through each element of the `prices` array.
-- If the price is lower than `min_price`, it updates `min_price`.
-- Otherwise, it calculates the profit by subtracting `min_price` from the current price and updates `max_profit` if this profit is higher.
-- The function returns `max_profit`, which is the maximum profit possible with one transaction.
+### Complexity Analysis
 
-## Complexity Analysis
+- **Time Complexity:** `O(n)` where `n` is the number of elements in the array. The algorithm iterates through the array once.
+- **Space Complexity:** `O(1)` since only a few extra variables are used.
 
-- **Time Complexity**: `O(n)`, where `n` is the number of elements in the `prices` array.
-- **Space Complexity**: `O(1)`, since we are using only a few variables for calculations and no extra space.
+## How to Use This Repository
 
-## Additional Notes
+1. **Clone the Repository:**  
+   `git clone https://github.com/superALLEY/150InterviewQuestions.git`
 
-This problem tests your ability to implement an efficient algorithm that can find the maximum profit with a single transaction by tracking the minimum price seen so far and calculating possible profits on the fly. It is a common problem in coding interviews as it checks both logical thinking and the ability to optimize algorithms.
+2. **Navigate to the Problem Folder:**  
+   Locate the folder for the "Majority Element" problem.
+
+3. **Run the Solution:**  
+   Open the solution file in your preferred IDE and execute it to see the results.
+
+## Contributing
+
+Contributions are always welcome! To contribute:
+
+1. **Fork the Repository.**
+2. **Create a New Branch:**  
+   `git checkout -b feature/problem-name`
+
+3. **Commit Your Changes:**  
+   `git commit -am 'Add problem-name solution'`
+
+4. **Push to the Branch:**  
+   `git push origin feature/problem-name`
+
+5. **Create a Pull Request.**
+
+## License
+
+This repository is licensed under the MIT License. You are free to use the code for learning and interview preparation.
