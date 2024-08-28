@@ -1,106 +1,90 @@
 
-# Array Rotation
+# Max Profit from Stock Prices
 
 ## Problem Description
 
-**Objective:**  
-Given an array `nums` of size `n`, rotate the array to the right by `k` steps, where `k` is a non-negative integer. The rotation should be done in-place.
+Given an array `prices` where `prices[i]` is the price of a given stock on the `i-th` day, return the maximum profit you can achieve from buying and selling the stock. You must buy before you sell, and you are only allowed to complete at most one transaction (i.e., buy one and sell one share of the stock).
 
-**Constraints:**
-- The array should be rotated in-place with O(1) extra space.
-- The algorithm should run in linear time, `O(n)`.
+If no profit can be achieved, return 0.
 
-**Example:**
+### Constraints
+- `1 <= prices.length <= 10^5`
+- `0 <= prices[i] <= 10^4`
 
-- **Input:** `nums = [1, 2, 3, 4, 5, 6, 7]`, `k = 3`  
-  **Output:** `[5, 6, 7, 1, 2, 3, 4]`  
-  **Explanation:** The array is rotated to the right by 3 steps.
+## Example 1
 
-- **Input:** `nums = [-1, -100, 3, 99]`, `k = 2`  
-  **Output:** `[3, 99, -1, -100]`  
-  **Explanation:** The array is rotated to the right by 2 steps.
+**Input**:
+```python
+prices = [7, 1, 5, 3, 6, 4]
+```
+**Output**:
+```python
+5
+```
+**Explanation**:
+Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5.
+
+## Example 2
+
+**Input**:
+```python
+prices = [7, 6, 4, 3, 1]
+```
+**Output**:
+```python
+0
+```
+**Explanation**:
+In this case, no transaction is done, and the maximum profit is 0.
 
 ## Approach
 
-### Reversal Method
+### Initial Setup:
 
-This problem is efficiently solved using the **Reversal Method**. The algorithm involves reversing parts of the array to achieve the rotation in-place.
+- Use a variable `min_price` to keep track of the minimum price encountered so far.
+- Use another variable `max_profit` to store the maximum profit encountered so far.
 
-1. **Reverse the Entire Array:**  
-   - First, reverse the entire array. This will move the elements that need to be rotated to the front to the back, and vice versa.
+### Iterating Over the Array:
 
-2. **Reverse the First `k` Elements:**  
-   - Next, reverse the first `k` elements. This reorders the first part of the array.
+- Iterate through the `prices` array.
+- For each price, if it's lower than the current `min_price`, update `min_price`.
+- Otherwise, calculate the profit by subtracting `min_price` from the current price, and update `max_profit` if this profit is higher than the current `max_profit`.
 
-3. **Reverse the Remaining Elements:**  
-   - Finally, reverse the rest of the array (from index `k` to the end). This places the remaining elements in the correct order.
+### Final Steps:
 
-   ```python
-   class Solution(object):
-       def rotate(self, nums, k):
-           n = len(nums)
-           k = k % n  # In case k is greater than n
+- After completing the loop, return `max_profit`.
 
-           # Step 1: Reverse the entire array
-           self.reverse(nums, 0, n - 1)
-           # Step 2: Reverse the first k elements
-           self.reverse(nums, 0, k - 1)
-           # Step 3: Reverse the rest of the array
-           self.reverse(nums, k, n - 1)
+## Solution
 
-       def reverse(self, nums, start, end):
-           while start < end:
-               nums[start], nums[end] = nums[end], nums[start]
-               start += 1
-               end -= 1
-   ```
+```python
+class Solution(object):
+    def maxProfit(self, prices):
+        min_price = float('inf')  # Initialize to a very large number
+        max_profit = 0  # Initialize to 0
 
-### Example Walkthrough with `nums = [1, 2, 3, 4, 5, 6, 7]` and `k = 3`:
+        for price in prices:
+            # Update min_price if current price is lower
+            if price < min_price:
+                min_price = price
+            # Calculate profit if current price is sold at min_price, update max_profit if higher
+            elif price - min_price > max_profit:
+                max_profit = price - min_price
 
-- **Initialization:**  
-  Reverse the entire array: `[7, 6, 5, 4, 3, 2, 1]`.
+        return max_profit
+```
 
-- **Reverse the First 3 Elements:**
-  - After reversing: `[5, 6, 7, 4, 3, 2, 1]`.
+## Explanation
 
-- **Reverse the Remaining Elements:**
-  - After reversing: `[5, 6, 7, 1, 2, 3, 4]`.
+- The loop goes through each element of the `prices` array.
+- If the price is lower than `min_price`, it updates `min_price`.
+- Otherwise, it calculates the profit by subtracting `min_price` from the current price and updates `max_profit` if this profit is higher.
+- The function returns `max_profit`, which is the maximum profit possible with one transaction.
 
-- **Final Output:**  
-  The algorithm returns `[5, 6, 7, 1, 2, 3, 4]`.
+## Complexity Analysis
 
-### Complexity Analysis
+- **Time Complexity**: `O(n)`, where `n` is the number of elements in the `prices` array.
+- **Space Complexity**: `O(1)`, since we are using only a few variables for calculations and no extra space.
 
-- **Time Complexity:** `O(n)` where `n` is the number of elements in the array. The algorithm iterates through the array a constant number of times.
-- **Space Complexity:** `O(1)` since the reversal is done in-place with no extra space.
+## Additional Notes
 
-## How to Use This Repository
-
-1. **Clone the Repository:**  
-   `git clone https://github.com/superALLEY/150InterviewQuestions.git`
-
-2. **Navigate to the Problem Folder:**  
-   Locate the folder for the "Array Rotation" problem.
-
-3. **Run the Solution:**  
-   Open the solution file in your preferred IDE and execute it to see the results.
-
-## Contributing
-
-Contributions are always welcome! To contribute:
-
-1. **Fork the Repository.**
-2. **Create a New Branch:**  
-   `git checkout -b feature/problem-name`
-
-3. **Commit Your Changes:**  
-   `git commit -am 'Add problem-name solution'`
-
-4. **Push to the Branch:**  
-   `git push origin feature/problem-name`
-
-5. **Create a Pull Request.**
-
-## License
-
-This repository is licensed under the MIT License. You are free to use the code for learning and interview preparation.
+This problem tests your ability to implement an efficient algorithm that can find the maximum profit with a single transaction by tracking the minimum price seen so far and calculating possible profits on the fly. It is a common problem in coding interviews as it checks both logical thinking and the ability to optimize algorithms.
