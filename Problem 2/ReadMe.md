@@ -1,6 +1,6 @@
 # Remove Element
 
-**Difficulty**: Easy
+**Difficulty**: Easy 
 
 ## Problem Description
 
