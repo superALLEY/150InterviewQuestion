@@ -1,6 +1,6 @@
 # Merge Sorted Array
 
-**Difficulty**: Easy
+**Difficulty**: Easy 
 
 ## Problem Description
 
